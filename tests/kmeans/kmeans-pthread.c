@@ -23,7 +23,7 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */ 
-#include </home/henry/gem5-nej/include/gem5/m5ops.h>
+#include "gem5/m5ops.h"
 #include <stdio.h>
 #include <strings.h>
 #include <string.h>

@@ -24,7 +24,7 @@
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */ 
 
-#include </home/henry/gem5-nej/include/gem5/m5ops.h>
+#include "gem5/m5ops.h"
 
 #include <stdio.h>
 #include <strings.h>
