@@ -1,0 +1,5 @@
+/inputs/*
+/tests/histogram/*.o
+/tests/kmeans/*.o
+/tests/linear_regression/*.o
+/tests/pca/*.o
