@@ -34,8 +34,9 @@ include $(HOME)/Defines.mk
 LIBS += -L$(HOME)/$(LIB_DIR) -l$(PHOENIX) $(GEM5_UTIL) $(M5THREAD)
 
 KMEANS_PTHREAD_OBJS = kmeans-pthread.o
+KMEANS_PTHREAD_SMALL_OBJS = kmeans-pthread-small.o
 
-PROGS = kmeans-pthread
+PROGS = kmeans-pthread kmeans-pthread-small
 
 .PHONY: default all clean
 
@@ -45,6 +46,9 @@ all: $(PROGS)
 
 kmeans-pthread: $(KMEANS_PTHREAD_OBJS)
 	$(CC) $(CFLAGS) -o $@ $(KMEANS_PTHREAD_OBJS) $(LIBS) -I$(GEM5_INC)
+
+kmeans-pthread-small: $(KMEANS_PTHREAD_SMALL_OBJS)
+	$(CC) $(CFLAGS) -o $@ $(KMEANS_PTHREAD_SMALL_OBJS) $(LIBS) -I$(GEM5_INC)
 	
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@ -I$(HOME)/$(INC_DIR) -I$(GEM5_INC)
