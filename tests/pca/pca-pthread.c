@@ -36,9 +36,9 @@
 #include <pthread.h>
 #include "stddefines.h"
 
-#define DEF_GRID_SIZE 100  // all values in the matrix are from 0 to this value 
-#define DEF_NUM_ROWS 10
-#define DEF_NUM_COLS 10
+#define DEF_GRID_SIZE 1000  // all values in the matrix are from 0 to this value 
+#define DEF_NUM_ROWS 100
+#define DEF_NUM_COLS 100
 
 int num_rows;
 int num_cols;
