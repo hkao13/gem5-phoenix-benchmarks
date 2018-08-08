@@ -1,0 +1,14 @@
+ASM command for C line: val = &(thread_arg->data[i]);
+seems to be:
+
+	mov	rax, QWORD PTR [rbp-40]	# tmp134, thread_arg
+	mov	rdx, QWORD PTR [rax]	# D.4933, thread_arg_4->data
+	mov	eax, DWORD PTR [rbp-44]	# tmp135, i
+	cdqe
+	add	rax, rdx	# tmp136, D.4933
+	mov	QWORD PTR [rbp-8], rax	# val, tmp136
+
+so look for this line: mov	QWORD PTR [rbp-8], rax
+for approx SAS
+
+this is for red, do same for blue and green:

@@ -149,16 +149,18 @@ static inline unsigned int get_sq_dist(int *v1, int *v2)
 {
    int i;
    
-   unsigned int sum = 0;
+   volatile unsigned int sum = 0;
    for (i = 0; i < dim; i++) 
    {
-      sum += ((v1[i] - v2[i]) * (v1[i] - v2[i])); 
+      m5_approxbegin();
+      sum += ((v1[i] - v2[i]) * (v1[i] - v2[i]));
+      m5_approxend();
    }
    return sum;
 }
 
 /** add_to_sum()
- *	Helper function to update the total distance sum
+ * Helper function to update the total distance sum
  */
 void add_to_sum(int *sum, int *point)
 {
@@ -177,18 +179,22 @@ void *find_clusters(void *arg)
 {
    thread_arg *t_arg = (thread_arg *)arg;
    int i, j;
-   unsigned int min_dist, cur_dist;
+   volatile unsigned int min_dist, cur_dist;
    int min_idx;
    int start_idx = t_arg->start_idx;
    int end_idx = start_idx + t_arg->num_pts;
    
    for (i = start_idx; i < end_idx; i++) 
    {
+      m5_approxbegin();
       min_dist = get_sq_dist(points[i], means[0]);
+      m5_approxend();
       min_idx = 0; 
       for (j = 1; j < num_means; j++)
       {
+         m5_approxbegin();
          cur_dist = get_sq_dist(points[i], means[j]);
+         m5_approxend();
          if (cur_dist < min_dist) 
          {
             min_dist = cur_dist;
@@ -198,7 +204,9 @@ void *find_clusters(void *arg)
       
       if (clusters[i] != min_idx) 
       {
+         m5_approxbegin();
          clusters[i] = min_idx;
+         m5_approxend();
          modified = true;
       }
    }
@@ -238,7 +246,9 @@ void *calc_means(void *arg)
          //dprintf("div sum = %d, grp size = %d\n", sum[j], grp_size);
          if (grp_size != 0)
          { 
+            m5_approxbegin();
             means[i][j] = sum[j] / grp_size;
+            m5_approxend();
          }
       }       
    }

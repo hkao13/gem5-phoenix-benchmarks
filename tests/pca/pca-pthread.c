@@ -37,8 +37,8 @@
 #include "stddefines.h"
 
 #define DEF_GRID_SIZE 1000  // all values in the matrix are from 0 to this value 
-#define DEF_NUM_ROWS 100
-#define DEF_NUM_COLS 100
+#define DEF_NUM_ROWS 500
+#define DEF_NUM_COLS 500
 
 int num_rows;
 int num_cols;
@@ -46,8 +46,8 @@ int grid_size;
 int num_procs;
 int next_row;
 
-int **matrix, **cov;
-int *mean;
+volatile int **matrix, **cov;
+volatile int *mean;
 pthread_mutex_t row_lock;
 
 /* Structure that stores the rows
@@ -136,15 +136,19 @@ void generate_points(int **pts, int rows, int cols)
  */
 void *calc_mean(void *arg) {
    int i, j;
-   int sum = 0;
+   volatile int sum = 0;
    mean_arg_t *mean_arg = (mean_arg_t *)arg;
    
    for (i = mean_arg->first_row; i < mean_arg->last_row; i++) {
       sum = 0;
       for (j = 0; j < num_cols; j++) {
+         m5_approxbegin();
          sum += matrix[i][j];
+         m5_approxend();
       }
-      mean[i] = sum / num_cols;   
+      m5_approxbegin();
+      mean[i] = sum / num_cols;
+      m5_approxend(); 
    }
    
    return (void *)0;
@@ -156,7 +160,7 @@ void *calc_mean(void *arg) {
  */
 void *calc_cov(void *arg) {
    int i, j, k;
-   int sum;
+   volatile int sum;
    
    pthread_mutex_lock(&row_lock);
    i = next_row;
@@ -167,9 +171,13 @@ void *calc_cov(void *arg) {
       for (j = i; j < num_rows; j++) {
          sum = 0;
          for (k = 0; k < num_cols; k++) {
+            m5_approxbegin();
             sum = sum + ((matrix[i][k] - mean[i]) * (matrix[j][k] - mean[j]));
+            m5_approxend();
          }
+         m5_approxbegin();
          cov[i][j] = cov[j][i] = sum/(num_cols-1);
+         m5_approxend();
       }
       pthread_mutex_lock(&row_lock);
       i = next_row;

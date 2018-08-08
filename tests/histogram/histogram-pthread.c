@@ -101,7 +101,7 @@ void *calc_hist(void *arg) {
    int *blue;
    int i;
    thread_arg_t *thread_arg = (thread_arg_t *)arg;
-   unsigned char *val;
+   volatile unsigned char *val;
    /*
    red = (int *)calloc(256, sizeof(int));
    green = (int *)calloc(256, sizeof(int));
@@ -116,14 +116,20 @@ void *calc_hist(void *arg) {
    for (i= thread_arg->data_pos; 
         i < thread_arg->data_pos + thread_arg->data_len; 
         i+=3) {
-               
+           
+      m5_approxbegin();    
       val = &(thread_arg->data[i]);
+      m5_approxend();
       blue[*val]++;
       
+      m5_approxbegin(); 
       val = &(thread_arg->data[i+1]);
+      m5_approxend();
       green[*val]++;
       
+      m5_approxbegin(); 
       val = &(thread_arg->data[i+2]);
+      m5_approxend();
       red[*val]++;   
    }
    /*

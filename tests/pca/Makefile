@@ -48,6 +48,7 @@ pca-pthread: $(PCA_PTHREAD_OBJS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@ -I$(HOME)/$(INC_DIR) -I$(GEM5_INC)
+	$(CC) $(CFLAGS) -fverbose-asm -S $< -o $(PROGS).s -I$(HOME)/$(INC_DIR) -I$(GEM5_INC) -masm=intel
 
 clean:
-	rm -f $(PROGS) $(PCA_PTHREAD_OBJS)
+	rm -f $(PROGS) $(PCA_PTHREAD_OBJS) *.s

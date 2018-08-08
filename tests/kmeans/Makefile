@@ -52,6 +52,7 @@ kmeans-pthread-small: $(KMEANS_PTHREAD_SMALL_OBJS)
 	
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@ -I$(HOME)/$(INC_DIR) -I$(GEM5_INC)
+	$(CC) $(CFLAGS) -fverbose-asm -S $< -o kmeans-pthread.s -I$(HOME)/$(INC_DIR) -I$(GEM5_INC)
 
 clean:
-	rm -f $(PROGS) $(KMEANS_PTHREAD_OBJS)
+	rm -f $(PROGS) $(KMEANS_PTHREAD_OBJS) *.s
